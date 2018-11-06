@@ -1,14 +1,6 @@
 #!/bin/bash
 
 npm init --force
-# figure out how to do this
-: '
-node > package.json << EOF
-var data = require('./package.json');
-data.scripts.start = 'node index.js';
-console.log(JSON.stringify(data));
-EOF
-'
 
 mkdir controllers routes models config errors
 touch index.js router.js config/main.js errors/custom.js errors/middleware.js .env .gitignore controllers/examples.js routes/examples.js models/user.js
