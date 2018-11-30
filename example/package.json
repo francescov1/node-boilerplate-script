@@ -1,19 +1,27 @@
 {
-  "name": "example",
+  "name": "node-init",
   "version": "1.0.0",
-  "description": "",
+  "description": "This script generates the necessary structure for a scalable Node.js application. The script performs the following operations: - initialize npm - create folders and files - download commonly used packages - write boilerplate code to files",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francescov1/node-boilerplate-script.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/francescov1/node-boilerplate-script/issues"
+  },
+  "homepage": "https://github.com/francescov1/node-boilerplate-script#readme",
   "dependencies": {
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "mongoose": "^5.3.10"
+    "mongoose": "^5.3.14"
   },
   "devDependencies": {
     "dotenv": "^6.1.0"

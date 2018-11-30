@@ -1,12 +1,15 @@
 #!/bin/bash
 
+# init npm and replace test script with start script
 npm init --force
+sed -i "" "s/\"test.*/\"start\": \"node index.js\"/" package.json
 
 mkdir controllers routes models config errors
 touch index.js router.js config/main.js errors/custom.js errors/middleware.js .env .gitignore controllers/examples.js routes/examples.js models/user.js
 npm install bluebird express body-parser mongoose
 npm install --save-dev dotenv
 
+# write index.js boilerplate
 cat > index.js <<- EOM
 'use strict';
 Promise = require('bluebird');
@@ -27,6 +30,7 @@ app.listen(config.port, () => {
 });
 EOM
 
+# write router.js boilerplate
 cat > router.js <<- EOM
 'use strict';
 const express = require('express');
@@ -46,6 +50,7 @@ module.exports = function(app) {
 };
 EOM
 
+# write config/main.js boilerplate
 cat > config/main.js <<- EOM
 'use strict';
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
@@ -56,16 +61,19 @@ module.exports = {
 };
 EOM
 
+# write .env boilerplate
 cat > .env <<- EOM
 NODE_ENV=development
 PORT=3000
 EOM
 
+# write .gitignore boilerplate
 cat > .gitignore <<- EOM
 **/node_modules/*
 **/.env
 EOM
 
+# write controllers/examples.js boilerplate
 cat > controllers/examples.js <<- EOM
 'use strict';
 module.exports = {
@@ -77,6 +85,7 @@ module.exports = {
 };
 EOM
 
+# write routes/examples.js boilerplate
 cat > routes/examples.js <<- EOM
 'use strict';
 const exampleController = require('../controllers/examples');
@@ -88,6 +97,7 @@ router.get('/hello', exampleController.helloWorld);
 module.exports = router;
 EOM
 
+# write errors/middleware.js boilerplate
 cat > errors/middleware.js <<- EOM
 'use strict';
 
@@ -107,6 +117,7 @@ function errorHandler(err, req, res, next) {
 module.exports = errorHandler;
 EOM
 
+# write errors/custom.js boilerplate
 cat > errors/custom.js <<- EOM
 'use strict';
 
@@ -151,7 +162,7 @@ module.exports = {
 };
 EOM
 
-
+# write models/user.js boilerplate
 cat > models/user.js <<- EOM
 'use strict';
 const mongoose = require("mongoose");
