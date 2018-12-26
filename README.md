@@ -12,7 +12,6 @@ Certain features could be considered optional but are additions that I add to al
 
 The directory structure generated is shown below:
 
-.
 ├── config
 │   ├── main.js       
 ├── controllers                    
