@@ -5,7 +5,6 @@ npm init --force
 sed -i "" "s/\"test.*/\"start\": \"node index.js\"/" package.json
 
 mkdir controllers routes models config errors
-touch index.js router.js config/main.js errors/custom.js errors/middleware.js .env .gitignore controllers/examples.js routes/examples.js models/user.js
 npm install bluebird express body-parser mongoose
 npm install --save-dev dotenv
 
