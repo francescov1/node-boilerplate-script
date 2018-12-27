@@ -45,6 +45,9 @@ module.exports = function(app) {
 
   // mount middleware to handle errors
   app.use(errorMiddleware)
+
+  // if undefined route hit
+  app.all("*", (req, res) => res.status(200).send("My Node.js API"));
 };
 EOM
 
