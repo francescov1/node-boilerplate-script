@@ -5,7 +5,7 @@ npm init --force
 sed -i "" "s/\"test.*/\"start\": \"node index.js\"/" package.json
 
 mkdir controllers routes models config errors
-npm install bluebird express body-parser mongoose dotenv
+npm install bluebird express body-parser mongoose dotenv helmet
 
 # write index.js boilerplate
 cat > index.js <<- EOM
@@ -13,12 +13,14 @@ cat > index.js <<- EOM
 Promise = require('bluebird');
 const config = require('./config/main');
 const express = require('express');
+const helmet = require('helmet');
+const bodyParser = require('body-parser');
 
 const router = require('./router.js');
-const bodyParser = require('body-parser');
 
 const app = express();
 
+app.use(helmet());
 app.use(bodyParser.json());
 
 router(app);
