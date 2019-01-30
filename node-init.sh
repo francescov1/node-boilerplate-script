@@ -70,6 +70,12 @@ NODE_ENV=development
 PORT=3000
 EOM
 
+# write .gitignore boilerplate
+cat > .gitignore <<- EOM
+**/node_modules/*
+**/.env
+EOM
+
 # write controllers/examples.js boilerplate
 cat > controllers/examples.js <<- EOM
 'use strict';
