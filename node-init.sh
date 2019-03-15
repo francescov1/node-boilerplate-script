@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # init npm and replace test script with start script
-npm init --force
+npm init -y
 sed -i "" "s/\"test.*/\"start\": \"node index.js\"/" package.json
 
 mkdir controllers routes models config errors
