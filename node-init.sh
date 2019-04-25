@@ -2,7 +2,7 @@
 
 # init npm and replace test script with start script
 npm init -y
-sed -i "" "s/\"test.*/\"start\": \"node index.js\"/" package.json
+sed -i "" "s/\"test\":.*/\"start\": \"node index.js\"/" package.json
 
 mkdir controllers routes models config errors
 npm install bluebird express body-parser mongoose dotenv helmet
