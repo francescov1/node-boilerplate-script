@@ -4,57 +4,57 @@
 npm init -y
 sed -i "" "s/\"test\":.*/\"start\": \"node index.js\"/" package.json
 
-mkdir controllers routes models config errors
-npm install bluebird express body-parser mongoose dotenv helmet
+mkdir routes models config errors
+npm install bluebird express body-parser mongoose dotenv helmet morgan
 
 # write index.js boilerplate
 cat > index.js <<- EOM
 'use strict';
 Promise = require('bluebird');
-const config = require('./config/main');
+const config = require('./config');
 const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
+const logger = require("morgan");
 
-const router = require('./router.js');
+const routes = require('./routes');
+const errors = require('./errors/middleware');
 
 const app = express();
 
+// basic middleware
 app.use(helmet());
+app.use(logger(config.node_env === "production" ? "combined" : "dev"));
 app.use(bodyParser.json());
 
-router(app);
+// api routes
+app.use('/api', routes)
+
+// error middleware
+app.use(errors)
+
+app.all("*", (req, res) => res.status(200).send("My Node.js API"));
 
 app.listen(config.port, () => {
-  console.log(\`server listening on port \${config.port}...\`)
+  console.log(\`Server listening on port \${config.port}...\`)
 });
 EOM
 
-# write router.js boilerplate
-cat > router.js <<- EOM
+# write routes/index.js boilerplate
+cat > routes/index.js <<- EOM
 'use strict';
 const express = require('express');
-const exampleRoutes = require('./routes/examples');
-const errorMiddleware = require('./errors/middleware');
+const exampleRoutes = require('./examples');
 
-module.exports = function(app) {
-  // mount api routes on to api router
-  const apiRouter = express.Router();
-  apiRouter.use('/examples', exampleRoutes);
+// mount routes on to api router
+const apiRouter = express.Router();
+apiRouter.use('/examples', exampleRoutes);
 
-  // mount api router on to app
-  app.use('/api', apiRouter);
-
-  // mount middleware to handle errors
-  app.use(errorMiddleware)
-
-  // mount catch all route
-  app.all("*", (req, res) => res.status(200).send("My Node.js API"));
-};
+module.exports = apiRouter;
 EOM
 
-# write config/main.js boilerplate
-cat > config/main.js <<- EOM
+# write config/index.js boilerplate
+cat > config/index.js <<- EOM
 'use strict';
 require('dotenv').config();
 
@@ -76,26 +76,15 @@ cat > .gitignore <<- EOM
 **/.env
 EOM
 
-# write controllers/examples.js boilerplate
-cat > controllers/examples.js <<- EOM
-'use strict';
-module.exports = {
-
-  helloWorld: function(req, res, next) {
-    return res.status(200).send('hello world');
-  },
-
-};
-EOM
-
 # write routes/examples.js boilerplate
 cat > routes/examples.js <<- EOM
 'use strict';
-const exampleController = require('../controllers/examples');
 const express = require('express');
 const router = express.Router();
 
-router.get('/hello', exampleController.helloWorld);
+router.get('/hello', (req, res, next) => {
+  return res.status(200).send('hello world');
+});
 
 module.exports = router;
 EOM
@@ -108,7 +97,7 @@ cat > errors/middleware.js <<- EOM
 function errorHandler(err, req, res, next) {
   console.error(err.stack);
 
-  var status = err.status || err.statusCode || err.code;
+  const status = err.status || err.statusCode || err.code || 400;
   return res.status(status >= 100 && status < 600 ? status : 500).send({
     error: {
       type: err.name || err.type,
@@ -120,8 +109,8 @@ function errorHandler(err, req, res, next) {
 module.exports = errorHandler;
 EOM
 
-# write errors/custom.js boilerplate
-cat > errors/custom.js <<- EOM
+# write errors/index.js boilerplate
+cat > errors/index.js <<- EOM
 'use strict';
 
 class AppError extends Error {
