@@ -74,6 +74,7 @@ EOM
 cat > .gitignore <<- EOM
 **/node_modules/*
 **/.env
+.DS_Store
 EOM
 
 # write routes/examples.js boilerplate
